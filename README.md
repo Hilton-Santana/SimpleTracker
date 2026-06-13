@@ -47,7 +47,7 @@ Then, we first ran the SSNN over the first image obtaining the following result:
 From this first inference, we extracted a base set for each player and transformed its mean color to the LAB space. Then, at each run-time inference, we used a simpler neural network with object detection, and compared the euclidean norm with each color basis. We attributed the player color by taking the smallest distance to the basis. This is explained in the following picture:
 ![](data/color_id.png)
 
-Finally, this is the final result result in run-time:
+Finally, this is the final result in run-time:
 ![](data/final_color_result.png)
 
 ## 2.3 Kalman Filter model
