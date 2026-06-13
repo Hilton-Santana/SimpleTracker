@@ -19,12 +19,12 @@ we proposed the followig algorithm for tracking the basketball players:
 - 5) Project the middle of the estimated bounding box center into the court using the homography defined in step 1)
 
 The final result was the following:
-![[data/final_result.gif]]
+![](data/final_result.gif)
 
 ## 2.1) Homography Transformation
 
 Here we implemented a simple algorithm that finds the transformation between two quadrilaterals (`quad2H` in [[homography.m]]) . One compreends the boundary of the court while the other was obained by taking manually the pixels of the boundary of the projected court:
-![[data/court_boundary.png]]
+![](data/court_boundary.png)
 The obtained homography was the following:
 
 ```text
@@ -38,16 +38,16 @@ H = [ 0.0003  0.0762 -34.3988 ]
 
 First we recall the concept of CIELAB color space, where the color is transformed into a space where the notion 
 of distance with the Euclidan norm can be obtained:
-![[data/color_topology.png]]
+![](data/color_topology.png)
 
 Then, we first ran the SSNN over the first image obtaining the following result:
-![[data/semantic_segmentation.png]]
+![](data/semantic_segmentation.png)
 
 From this first inference, we extracted a base set for each player and transformed its mean color to the LAB space. Then, at each run-time inference, we used a simpler neural network with object detection, and compared the euclidean norm with each color basis. We attributed the player color by taking the smallest distance to the basis. This is explained in the following picture:
-![[data/color_id.png]]
+![](data/color_id.png)
 
 Finally, this is the final result result in run-time:
-![[data/final_color_result.png]]
+![](data/final_color_result.png)
 
 ## 2.3 Kalman Filter model
 
