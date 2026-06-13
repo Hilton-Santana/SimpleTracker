@@ -19,6 +19,7 @@ we proposed the followig algorithm for tracking the basketball players:
 - 5) Project the middle of the estimated bounding box center into the court using the homography defined in step 1)
 
 The final result was the following:
+
 ![](data/final_result.gif)
 
 ## 2.1) Homography Transformation
@@ -32,7 +33,7 @@ H = [ 0.0003  0.0762 -34.3988 ]
     [ 0.0203  0.0160 -12.1036 ]
     [ 0.0000  0.0013   0.4440 ]
 ```
-![[data/homography.png]]
+![](data/homography.png)
 
 ## 2.2) Player color identification
 
