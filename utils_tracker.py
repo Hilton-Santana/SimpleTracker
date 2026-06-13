@@ -321,7 +321,7 @@ def IsValid(dets):
   return flag
 
 def ShowCourt():
-    frame = pd.read_excel('court_geometry.xlsx', header=0)
+    frame = pd.read_excel('data/court_geometry.xlsx', header=0)
 
     court_x_min = 0.0
     court_x_max = 15.0

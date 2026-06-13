@@ -75,7 +75,7 @@ imgsz = check_img_size((640, 640), s=stride)  # check image size
 
 
 #-------------Initialization------------#
-filename_dir = 'dir_quadro_'+str(0)+ '.jpg'
+filename_dir = 'data/dir_quadro_'+str(0)+ '.jpg'
 players_frame = []
 im_dir = cv2.imread(filename_dir)
 #initialize players colors
@@ -95,7 +95,7 @@ H[1,:] = np.array([0.020250767381669,0.015966246977228,-12.103605353296231])
 H[2,:] = np.array([-0.000018109494451,0.001315802531690,0.443977294605643])
 
 #----------Tracker-----------------#
-vid_capture = cv2.VideoCapture('dir.mov')
+vid_capture = cv2.VideoCapture('data/short.mov')
 n_frames = int(vid_capture.get(cv2.CAP_PROP_FRAME_COUNT))
 n = 5000 # number of frames 
 #-----------------#------------------------------------#
