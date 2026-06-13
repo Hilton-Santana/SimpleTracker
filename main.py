@@ -10,6 +10,8 @@ Date      	By	Comments
 ----------	---	----------------------------------------------------------
 '''
 
+from utils_tracker import *
+
 from symbol import classdef
 import detectron2
 from detectron2.utils.logger import setup_logger
@@ -55,7 +57,6 @@ from matplotlib import path
 from matplotlib import pyplot as plt
 from skimage import color as ski_c
 from collections import namedtuple 
-from utils_tracker import *
 
 # define detectro predictor
 cfg = get_cfg()
@@ -83,6 +84,9 @@ players = Process(predictor, im_dir,base_dict)
 dets = det(players)
 players_frame.append(players)
 size_track = len(players)
+
+# initialize court
+ax, court_x_min, court_x_max, court_y_min, court_y_max = ShowCourt()
 
 # Define homography matrix (obtained with a previous calibration step)
 H = np.zeros((3,3))

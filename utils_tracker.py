@@ -320,55 +320,61 @@ def IsValid(dets):
   flag = (size == 12) and  (count_blue == 2) and (count_white == 5) and (count_black == 5)
   return flag
 
-
-#--------------Track the players------------#
 def ShowCourt():
-  frame = pd.read_excel('court_geometry.xlsx',header=0)
-  court_x_min = 0.0
-  court_x_max = 15.0
-  court_y_min = 0.0
-  court_y_max = 28.0
-  fig,ax = plt.subplots()
-  ax.set_aspect('equal', 'box')
-  plt.xlim([court_x_min, court_x_max])
-  plt.ylim([court_y_min, court_y_max])
-  ## Draw Court
-  #Four lines
-  A0 = frame[{'Xg','Yg'}][~frame['Xg'].where(frame['Pts'] == "A0").isnull()].astype(np.float64)
-  A8 = frame[{'Xg','Yg'}][~frame['Xg'].where(frame['Pts'] == "A8").isnull()].astype(np.float64)
-  S8 = frame[{'Xg','Yg'}][~frame['Xg'].where(frame['Pts'] == "S8").isnull()].astype(np.float64)
-  S0 = frame[{'Xg','Yg'}][~frame['Xg'].where(frame['Pts'] == "S0").isnull()].astype(np.float64)
-  ax.plot([A0['Xg'],A8['Xg']],[A0['Yg'],A8['Yg']],color='black',linewidth=2.5)
-  ax.plot([A8['Xg'],S8['Xg']],[A8['Yg'],S8['Yg']],color='black',linewidth=2.5)
-  ax.plot([S8['Xg'],S0['Xg']],[S8['Yg'],S0['Yg']],color='black',linewidth=2.5)
-  ax.plot([S0['Xg'],A0['Xg']],[S0['Yg'],A0['Yg']],color='black',linewidth=2.5)
-  #Garrafão
-  A2 = frame[{'Xg','Yg'}][~frame['Xg'].where(frame['Pts'] == "A2").isnull()].astype(np.float64)
-  F2 = frame[{'Xg','Yg'}][~frame['Xg'].where(frame['Pts'] == "F2").isnull()].astype(np.float64)
-  F6 = frame[{'Xg','Yg'}][~frame['Xg'].where(frame['Pts'] == "F6").isnull()].astype(np.float64)
-  A6 = frame[{'Xg','Yg'}][~frame['Xg'].where(frame['Pts'] == "A6").isnull()].astype(np.float64)
-  ax.plot([A2['Xg'],F2['Xg']],[A2['Yg'],F2['Yg']],color='black',linewidth=1.5)
-  ax.plot([F2['Xg'],F6['Xg']],[F2['Yg'],F6['Yg']],color='black',linewidth=1.5)
-  ax.plot([F6['Xg'],A6['Xg']],[F6['Yg'],A6['Yg']],color='black',linewidth=1.5)
-  ax.plot([A6['Xg'],A2['Xg']],[A6['Yg'],A2['Yg']],color='black',linewidth=1.5)
-  N2 = frame[{'Xg','Yg'}][~frame['Xg'].where(frame['Pts'] == "N2").isnull()].astype(np.float64)
-  S2 = frame[{'Xg','Yg'}][~frame['Xg'].where(frame['Pts'] == "S2").isnull()].astype(np.float64)
-  S6 = frame[{'Xg','Yg'}][~frame['Xg'].where(frame['Pts'] == "S6").isnull()].astype(np.float64)
-  N6 = frame[{'Xg','Yg'}][~frame['Xg'].where(frame['Pts'] == "N6").isnull()].astype(np.float64)
-  ax.plot([N2['Xg'],S2['Xg']],[N2['Yg'],S2['Yg']],color='black',linewidth=1.5)
-  ax.plot([S2['Xg'],S6['Xg']],[S2['Yg'],S6['Yg']],color='black',linewidth=1.5)
-  ax.plot([S6['Xg'],N6['Xg']],[S6['Yg'],N6['Yg']],color='black',linewidth=1.5)
-  ax.plot([N6['Xg'],N2['Xg']],[N6['Yg'],N2['Yg']],color='black',linewidth=1.5)
-  #circle
-  J4 = frame[{'Xg','Yg'}][~frame['Xg'].where(frame['Pts'] == "J4").isnull()].astype(np.float64)
-  K4 = frame[{'Xg','Yg'}][~frame['Xg'].where(frame['Pts'] == "K4").isnull()].astype(np.float64)
-  j4 = np.array([J4['Xg'],J4['Yg']]).flatten()
-  k4 = np.array([K4['Xg'],K4['Yg']]).flatten()
-  R = np.sqrt(np.dot(k4 - j4,k4 - j4))
-  teta = np.linspace(0.0, 2*np.pi, num=30)
-  axis_i = np.array([0,1]).flatten()
-  axis_j = np.array([1,0]).flatten()
-  circle = np.zeros((2,30))
-  for i in range(0,30):
-   circle[:,i] = j4 + R*np.cos(teta[i])*axis_i + R*np.sin(teta[i])*axis_j
-  ax.plot(circle[0,:],circle[1,:],color='black',linewidth=1.5)
+    frame = pd.read_excel('court_geometry.xlsx', header=0)
+
+    court_x_min = 0.0
+    court_x_max = 15.0
+    court_y_min = 0.0
+    court_y_max = 28.0
+
+    fig, ax = plt.subplots()
+    ax.set_aspect('equal', 'box')
+    ax.set_xlim([court_x_min, court_x_max])
+    ax.set_ylim([court_y_min, court_y_max])
+
+    def pt(name):
+        row = frame.loc[frame['Pts'] == name, ['Xg', 'Yg']].astype(np.float64)
+        if row.empty:
+            raise ValueError(f"Point {name} not found in court_geometry.xlsx")
+        return row.iloc[0].to_numpy()
+
+    def line(p1, p2, linewidth=1.5):
+        a = pt(p1)
+        b = pt(p2)
+        ax.plot([a[0], b[0]], [a[1], b[1]], color='black', linewidth=linewidth)
+
+    # Four outer lines
+    line("A0", "A8", linewidth=2.5)
+    line("A8", "S8", linewidth=2.5)
+    line("S8", "S0", linewidth=2.5)
+    line("S0", "A0", linewidth=2.5)
+
+    # Garrafão esquerdo
+    line("A2", "F2")
+    line("F2", "F6")
+    line("F6", "A6")
+    line("A6", "A2")
+
+    # Garrafão direito
+    line("N2", "S2")
+    line("S2", "S6")
+    line("S6", "N6")
+    line("N6", "N2")
+
+    # Circle
+    j4 = pt("J4")
+    k4 = pt("K4")
+
+    R = np.linalg.norm(k4 - j4)
+    theta = np.linspace(0.0, 2 * np.pi, num=30)
+
+    circle_x = j4[0] + R * np.sin(theta)
+    circle_y = j4[1] + R * np.cos(theta)
+
+    ax.plot(circle_x, circle_y, color='black', linewidth=1.5)
+
+    #debug
+    #plt.show()
+    #enddebug
+    return ax, court_x_min, court_x_max, court_y_min, court_y_max
