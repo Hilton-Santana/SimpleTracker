@@ -16,7 +16,7 @@ we proposed the followig algorithm for tracking the basketball players:
 - 2) Define a color mapping for the players using a Semantic Segmentation Neural Network (SSNN) - detectron2
 - 3) For a real-time performance changed the SSNN to a object detection neural network (YoloV5)
 - 4) Implement a simple Kalman Filter model to estimate the bounding box motion across two consecutive frames
-- 5) Project the middle of the estimated bounding box center into the court using the homography defined in step 1)
+- 5) Project the bottom center of the estimated bounding box into the court using the homography defined in step 1)
 
 The final result was the following:
 
@@ -52,4 +52,4 @@ Finally, this is the final result in run-time:
 
 ## 2.3 Kalman Filter model
 
-In real-time we used the YoloV5 NN to obtain the bounding box of each player. After identifing its color with step 2.2) we tracked its bounding box center using a Kalman Filter model in the 2D picture space. For the prediction step we assumed that the bounding box is moving with a constant velocity, while in the update step, we we used as innovationt the difference between the center of the current inference compared with the center of the current prediction. This is same rationale was used in the [SORT](https://arxiv.org/pdf/1602.00763) paper.
+In real-time we used the YoloV5 NN to obtain the bounding box of each player. After identifing its color with step 2.2) we tracked its bounding box bottom center using a Kalman Filter model in the 2D picture space. For the prediction step we assumed that the bounding box is moving with a constant velocity, while in the update step, we we used as innovationt the difference between the center of the current inference compared with the center of the current prediction. This is same rationale was used in the [SORT](https://arxiv.org/pdf/1602.00763) paper.
